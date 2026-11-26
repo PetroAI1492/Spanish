@@ -578,6 +578,15 @@ const finalLessons=[
 ];
 groups.push(...finalLessons);
 
+// Additional practical expressions. Appended so existing progress IDs remain unchanged.
+const everydayExpressionsIndex=groups.length;
+groups.push({name:'Everyday Expressions — Four useful phrases',words:[
+ ['No sé.','I don’t know.','noh SEH'],
+ ['¿Qué significa?','What does that mean?','keh seeg-nee-FEE-kah'],
+ ['Está bien.','It’s okay.','ehs-TAH byehn'],
+ ['No pasa nada.','No problem. / It’s okay.','noh PAH-sah NAH-dah']
+]});
+
 const allWords=groups.flatMap((g,gi)=>g.words.map((w,wi)=>({w,gi,wi,key:gi+'-'+wi})));
 const storageKey='spanishA1travel_v1';let saved={};try{saved=JSON.parse(localStorage.getItem(storageKey)||'{}')||{}}catch{}let learned=new Set(saved.learned||[]);let gi=Number.isInteger(saved.gi)?Math.max(0,Math.min(groups.length-1,saved.gi)):0,wi=0,tab='learn',showMeaning=false,quizOrder=[],quizIndex=0,answered=false,correct=0,sentenceIndex=0;
 const sentences=[['Yo quiero agua.','I want water.'],['Tengo café.','I have coffee.'],['Quiero agua o café.','I want water or coffee.'],['Yo tengo agua.','I have water.'],['Quiero café, pero no tengo.','I want coffee, but I do not have any.'],['Necesito agua.','I need water.'],['Quiero pan y leche.','I want bread and milk.'],['Tengo café y pan.','I have coffee and bread.'],['¿Dónde está el baño?','Where is the bathroom?'],['Estoy cansado.','I am tired.'],['Tengo hambre.','I am hungry.'],['¿Cómo está?','How are you? (formal)'],['Muchas gracias.','Thank you very much.'],['Quiero ir.','I want to go.']];
@@ -787,6 +796,12 @@ Object.assign(lessonSentences, {
   ]
  ]
 });
+lessonSentences[everydayExpressionsIndex]=[
+ ['No sé.','I don’t know.'],
+ ['¿Qué significa?','What does that mean?'],
+ ['Está bien.','It’s okay.'],
+ ['Lo siento. — No pasa nada.','I’m sorry. — No problem.']
+];
 function activeSentences(){return lessonSentences[gi]||sentences}
 const $=id=>document.getElementById(id);function persist(){try{localStorage.setItem(storageKey,JSON.stringify({learned:[...learned],gi,a2Unlocked,a2Learned:[...a2Learned],a2Lesson}))}catch{}}function current(){return groups[gi].words}function key(){return gi+'-'+wi}function switchTab(t){tab=t;['learn','quiz','sentences','progress','exam','a2'].forEach(x=>{$(x).classList.toggle('hidden',x!==t);$('tab'+x[0].toUpperCase()+x.slice(1)).classList.toggle('active',x===t)});if(t==='quiz'&&!quizOrder.length)restartQuiz();if(t==='progress')renderProgress();if(t==='exam')renderExamLanding();if(t==='a2')renderA2Gate();renderHeader()}
 function renderHeader(){const words=current(),count=words.filter((_,i)=>learned.has(gi+'-'+i)).length;$('category').value=gi;$('groupCount').textContent=words.length+' words';$('progressText').textContent=groups[gi].name;$('knownText').textContent=count+'/'+words.length+' learned';$('progressBar').style.width=(count/words.length*100)+'%'}
@@ -855,5 +870,5 @@ function speakA2(){speakText(a2Lessons[a2Lesson].cards[a2Card][0])}
 for(let i=0;i<a2Lessons.length;i++){const opt=document.createElement('option');opt.value=i;opt.textContent=a2Lessons[i].name;$('a2Select').append(opt)}
 $('a2Select').addEventListener('change',()=>{a2Lesson=Number($('a2Select').value);a2Card=0;a2Show=false;persist();renderA2()});renderA2Gate();
 
-const sel=$('category');[0,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,...Array.from({length:18},(_,i)=>28+i),1,2,3,4,5,6,7,8].forEach(i=>{const g=groups[i];const o=document.createElement('option');o.value=i;o.textContent=g.name;sel.append(o)});renderLearn();renderSentence();renderHeader();
+const sel=$('category');[0,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,...Array.from({length:18},(_,i)=>28+i),everydayExpressionsIndex,1,2,3,4,5,6,7,8].forEach(i=>{const g=groups[i];const o=document.createElement('option');o.value=i;o.textContent=g.name;sel.append(o)});renderLearn();renderSentence();renderHeader();
 </script></body></html>
